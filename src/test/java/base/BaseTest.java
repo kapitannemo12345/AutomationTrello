@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import java.util.concurrent.TimeUnit;
@@ -18,7 +19,7 @@ public class BaseTest {
 
     @Parameters("browser")
     @BeforeTest
-    public void beforeTest(String browser){
+    public void beforeTest(@Optional("chrome") String browser){
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver();
