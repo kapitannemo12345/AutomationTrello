@@ -24,11 +24,14 @@ public class LoginPage {
     @FindBy(className = "AuI9fDVRnIPU3l")
     private WebElement logo;
 
+    @FindBy(id = "WhiteboxContainer")
+    private WebElement failedLoginMessage;
+
     public LoginPage(WebDriver driver){
         PageFactory.initElements(driver, this);
     }
 
-    public void loginWithValidCredentials(WebDriver driver){
+    public void loginWithValidCredentials(){
         String email = System.getenv("T_EMAIL");
         String password = System.getenv("T_PASSWORD");
         searchLoginButton.click();
@@ -39,4 +42,13 @@ public class LoginPage {
         Assert.assertTrue( "login failed", logo.isDisplayed());
     }
 
+    public void loginWithInvalidPassword(){
+        String email = System.getenv("T_EMAIL");
+        String password = "123";
+        searchLoginButton.click();
+        emailInputField.sendKeys(email);
+        loginSubmitButton.click();
+        passwordInputField.sendKeys(password);
+        Assert.assertTrue( "failed login message does not show", failedLoginMessage.isDisplayed());
+    }
 }
