@@ -19,4 +19,9 @@ public class LoginTests extends BaseTest {
         loginPage.loginWithInvalidPassword();
     }
 
+    @Test
+    public void invalidEmailLogin(){
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.loginWithInvalidEmail();
+    }
 }

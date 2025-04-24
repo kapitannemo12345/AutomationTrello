@@ -27,6 +27,9 @@ public class LoginPage {
     @FindBy(id = "WhiteboxContainer")
     private WebElement failedLoginMessage;
 
+    @FindBy(id = "signup-submit")
+    private WebElement signupButton;
+
     public LoginPage(WebDriver driver){
         PageFactory.initElements(driver, this);
     }
@@ -49,6 +52,15 @@ public class LoginPage {
         emailInputField.sendKeys(email);
         loginSubmitButton.click();
         passwordInputField.sendKeys(password);
+        loginSubmitButton.click();
         Assert.assertTrue( "failed login message does not show", failedLoginMessage.isDisplayed());
+    }
+
+    public void loginWithInvalidEmail(){
+        String email = "fake123213145@gmail.com";
+        searchLoginButton.click();
+        emailInputField.sendKeys(email);
+        loginSubmitButton.click();
+        Assert.assertTrue( "failed login message does not show", signupButton.isDisplayed());
     }
 }
