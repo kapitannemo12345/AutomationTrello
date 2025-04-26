@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Allure;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,9 +38,12 @@ public class LoginPage {
     public void loginWithValidCredentials(){
         String email = System.getenv("T_EMAIL");
         String password = System.getenv("T_PASSWORD");
+        Allure.step("click login button");
         searchLoginButton.click();
+        Allure.step("click enter email");
         emailInputField.sendKeys(email);
         loginSubmitButton.click();
+        Allure.step("enter password");
         passwordInputField.sendKeys(password);
         loginSubmitButton.click();
         Assert.assertTrue( "login failed", logo.isDisplayed());
@@ -49,8 +53,10 @@ public class LoginPage {
         String email = System.getenv("T_EMAIL");
         String password = "123";
         searchLoginButton.click();
+        Allure.step("click enter email");
         emailInputField.sendKeys(email);
         loginSubmitButton.click();
+        Allure.step("enter fake password");
         passwordInputField.sendKeys(password);
         loginSubmitButton.click();
         Assert.assertTrue( "failed login message does not show", failedLoginMessage.isDisplayed());
@@ -59,6 +65,7 @@ public class LoginPage {
     public void loginWithInvalidEmail(){
         String email = "fake123213145@gmail.com";
         searchLoginButton.click();
+        Allure.step("enter fake email");
         emailInputField.sendKeys(email);
         loginSubmitButton.click();
         Assert.assertTrue( "failed login message does not show", signupButton.isDisplayed());
