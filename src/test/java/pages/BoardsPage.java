@@ -1,6 +1,7 @@
 package pages;
 
 import io.qameta.allure.Allure;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -48,7 +49,8 @@ public class BoardsPage {
         Allure.step("Wait for and click create to be clickable");
         wait.until(ExpectedConditions.elementToBeClickable(createBoard)).click();
         Allure.step("Verify board name is displayed");
-        wait.until(ExpectedConditions.visibilityOf(tableName)).isDisplayed();
+        wait.until(ExpectedConditions.visibilityOf(tableName));
+        Assert.assertTrue("table name is not shown", tableName.isDisplayed());
     }
 
 }
