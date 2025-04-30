@@ -7,6 +7,7 @@ import io.qameta.allure.SeverityLevel;
 import org.testng.annotations.Test;
 import pages.LoginPage;
 import pages.BoardsPage;
+import pages.SingleBoardPage;
 
 public class TableTests extends BaseTest {
 
@@ -20,8 +21,22 @@ public class TableTests extends BaseTest {
         boardsPage.createBoard();
     }
 
+    @Test
+    @Description("Create table")
+    @Severity(SeverityLevel.CRITICAL)
+    public void modifyTable(){
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.loginWithValidCredentials();
+        BoardsPage boardsPage = new BoardsPage(driver);
+        boardsPage.createBoard();
+        SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
+        singleBoardPage.addList(false, "to do");
+        singleBoardPage.addList(false, "in progress");
+        singleBoardPage.addList(false, "done");
+    }
 
 
 
-
+    //delete table
+    //edit table
 }

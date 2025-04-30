@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+
+
+<suite name="Tests2" parallel="tests" thread-count="1">
+    <listeners>
+        <!-- Allure TestNG Listener -->
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
+
+<!--    <test name="ChromeAddTable">-->
+<!--        <parameter name="browser" value="chrome" />-->
+<!--        <classes>-->
+<!--            <class name="tests.TableTests">-->
+<!--                <methods>-->
+<!--                    <include name="createTable"/>-->
+<!--                </methods>-->
+<!--            </class>-->
+<!--        </classes>-->
+<!--    </test>-->
+
+
+    <test name="ChromeAddTable">
+        <parameter name="browser" value="chrome" />
+        <classes>
+            <class name="tests.TableTests">
+                <methods>
+                    <include name="modifyTable"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
