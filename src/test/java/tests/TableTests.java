@@ -31,8 +31,14 @@ public class TableTests extends BaseTest {
         boardsPage.createBoard();
         SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
         singleBoardPage.addList(false, "to do");
+        singleBoardPage.addListItem("to do","item1");
         singleBoardPage.addList(false, "in progress");
+        singleBoardPage.addListItem("in progress", "item2");
         singleBoardPage.addList(false, "done");
+        singleBoardPage.addListItem("done", "item3");
+
+        //singleBoardPage.addListItem("done");
+
     }
 
 

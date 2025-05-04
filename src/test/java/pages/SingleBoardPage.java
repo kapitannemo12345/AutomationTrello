@@ -1,27 +1,32 @@
 package pages;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import io.qameta.allure.Allure;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import base.CommonTest;
 
 import java.time.Duration;
+import java.util.List;
 
 public class SingleBoardPage {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    @FindBy(xpath = "//button[normalize-space(text())='Dodaj listę']" )
-    private WebElement addAnotherListButton;
+    @FindBy(xpath = "//*[@data-testid='list-composer-button' and contains(text(), 'Dodaj kolejną listę')]" )
+    private List<WebElement> addListButton;
 
     @FindBy(xpath = "//div[contains(@class, 'MwwP5nu2toWaoN')]//textarea[@data-testid='list-name-textarea']") // class MwwP5nu2toWaoN is always new item
     private WebElement newListInputNameField;
 
     @FindBy(xpath = "//button[@data-testid='list-composer-add-list-button']")
-    private WebElement addListButton;
+    private WebElement addListButtonConfirm;
+
+    @FindBy(xpath = "//*[contains(@class, \"bxgKMAm3lq5BpA\") and contains(@class, \"SdamsUKjxSBwGb\") and contains(@class, \"SEj5vUdI3VvxDc\") and contains(text(), \"Dodaj Kartę\")]")
+    private WebElement addCardButton;
 
     public SingleBoardPage(WebDriver driver){
         this.driver = driver;
@@ -29,18 +34,56 @@ public class SingleBoardPage {
         PageFactory.initElements(driver, this);
     }
 
-    public void addList(Boolean existingList, String listName){
-        if (existingList){
-            addAnotherListButton.click();
-        }
-        newListInputNameField.sendKeys(listName);
-        wait.until(ExpectedConditions.attributeToBe(newListInputNameField, "value", listName));
-        wait.until(ExpectedConditions.elementToBeClickable(addListButton));
-        addListButton.click();
+    public WebElement findList(String listName){
+        return driver.findElement(By.xpath("//h2[@data-testid='list-name' and contains(., '" + listName + "')]"));
     }
 
+    public void addList(Boolean existingList, String listName){
+        if (!addListButton.isEmpty()){
+            addListButton.getFirst().click();
+        }
+        Allure.step("Enter list name: " + listName);
+        newListInputNameField.sendKeys(listName);
+        wait.until(ExpectedConditions.attributeToBe(newListInputNameField, "value", listName));
+        wait.until(ExpectedConditions.elementToBeClickable(addListButtonConfirm));
+        addListButtonConfirm.click();
+        WebElement list = getListElementByName(listName);
+    }
 
-    
-    
-    
+    public WebElement getListElementByName(String listName) {
+        String xpath = String.format("//h2[@data-testid='list-name' and contains(text(), '%s')]", listName);
+        return driver.findElement(By.xpath(xpath));
+    }
+
+    public WebElement getAddCardButtonForList(WebElement listHeader) {
+        // Wait for the button to be clickable
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Wait for 10 seconds max
+        return wait.until(ExpectedConditions.elementToBeClickable(
+                listHeader.findElement(By.xpath(".//ancestor::li[@data-testid='list-wrapper']//button[@data-testid='list-add-card-button']"))
+        ));
+    }
+
+    public WebElement getCardFieldText() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Wait for 10 seconds max
+        // Wait for the textarea to be visible
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(".//ancestor::li[@data-testid='list-wrapper']//form//textarea[@data-testid='list-card-composer-textarea']")
+        ));
+    }
+
+    public void addListItem(String listName, String itemName) {
+        CommonTest.Wait(250);
+        WebElement listHeader = getListElementByName(listName);
+        WebElement add = getAddCardButtonForList(listHeader);
+        add = wait.until(ExpectedConditions.elementToBeClickable(add));
+        add.click();
+        CommonTest.Wait(250);
+        WebElement textField = getCardFieldText();
+        textField.sendKeys(itemName);
+        CommonTest.Wait(250);
+        wait.until(ExpectedConditions.attributeToBe(textField, "value", itemName));
+        addCardButton.click();
+        CommonTest.Wait(250);
+    }
+
 }

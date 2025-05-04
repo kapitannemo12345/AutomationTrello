@@ -2,7 +2,6 @@ package base;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterTest;
@@ -28,7 +27,7 @@ public class BaseTest {
             WebDriverManager.firefoxdriver().setup();
             driver = new FirefoxDriver();
         }
-        driver.manage().timeouts().implicitlyWait(10L, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(5L, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         driver.get(baseUrl);
     }
