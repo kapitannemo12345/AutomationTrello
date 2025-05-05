@@ -38,7 +38,7 @@ public class SingleBoardPage {
         return driver.findElement(By.xpath("//h2[@data-testid='list-name' and contains(., '" + listName + "')]"));
     }
 
-    public void addList(Boolean existingList, String listName){
+    public void addList(String listName){
         if (!addListButton.isEmpty()){
             addListButton.getFirst().click();
         }
@@ -56,34 +56,43 @@ public class SingleBoardPage {
     }
 
     public WebElement getAddCardButtonForList(WebElement listHeader) {
-        // Wait for the button to be clickable
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Wait for 10 seconds max
         return wait.until(ExpectedConditions.elementToBeClickable(
                 listHeader.findElement(By.xpath(".//ancestor::li[@data-testid='list-wrapper']//button[@data-testid='list-add-card-button']"))
         ));
     }
 
-    public WebElement getCardFieldText() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Wait for 10 seconds max
-        // Wait for the textarea to be visible
+    public WebElement getCardTextField() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath(".//ancestor::li[@data-testid='list-wrapper']//form//textarea[@data-testid='list-card-composer-textarea']")
         ));
     }
 
+    public WebElement getListContainer(WebElement listHeader){
+        return listHeader.findElement(By.xpath(".//ancestor::li[@data-testid='list-wrapper']"));
+    }
+
+    public List<WebElement> getListItems(String listName, String itemName) {
+        WebElement listHeader = getListElementByName(listName);
+        WebElement listContainer = getListContainer(listHeader);
+
+        String itemXPath = String.format(".//ol//li//a[contains(text(), '%s')]", itemName);
+
+        return wait.until(ExpectedConditions.visibilityOfAllElements(
+                listContainer.findElements(By.xpath(itemXPath))
+        ));
+    }
+
     public void addListItem(String listName, String itemName) {
-        CommonTest.Wait(250);
         WebElement listHeader = getListElementByName(listName);
         WebElement add = getAddCardButtonForList(listHeader);
         add = wait.until(ExpectedConditions.elementToBeClickable(add));
         add.click();
-        CommonTest.Wait(250);
-        WebElement textField = getCardFieldText();
+        CommonTest.Wait(500);
+        WebElement textField = getCardTextField();
         textField.sendKeys(itemName);
-        CommonTest.Wait(250);
+        CommonTest.Wait(500);
         wait.until(ExpectedConditions.attributeToBe(textField, "value", itemName));
         addCardButton.click();
-        CommonTest.Wait(250);
     }
 
 }

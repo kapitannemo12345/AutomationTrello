@@ -1,6 +1,7 @@
 package tests;
 
 import base.BaseTest;
+import base.CommonTest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -30,12 +31,18 @@ public class TableTests extends BaseTest {
         BoardsPage boardsPage = new BoardsPage(driver);
         boardsPage.createBoard();
         SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
-        singleBoardPage.addList(false, "to do");
+        singleBoardPage.addList( "to do");
+        CommonTest.Wait(500);
         singleBoardPage.addListItem("to do","item1");
-        singleBoardPage.addList(false, "in progress");
+        CommonTest.Wait(500);
+        singleBoardPage.addList( "in progress");
+        CommonTest.Wait(500);
         singleBoardPage.addListItem("in progress", "item2");
-        singleBoardPage.addList(false, "done");
+        CommonTest.Wait(500);
+        singleBoardPage.addList( "done");
+        CommonTest.Wait(500);
         singleBoardPage.addListItem("done", "item3");
+        singleBoardPage.getListItems("to do","item1");
 
         //singleBoardPage.addListItem("done");
 
