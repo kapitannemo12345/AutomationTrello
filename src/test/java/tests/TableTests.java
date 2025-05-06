@@ -5,10 +5,13 @@ import base.CommonTest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import pages.LoginPage;
 import pages.BoardsPage;
 import pages.SingleBoardPage;
+
+import java.util.List;
 
 public class TableTests extends BaseTest {
 
@@ -42,10 +45,7 @@ public class TableTests extends BaseTest {
         singleBoardPage.addList( "done");
         CommonTest.Wait(500);
         singleBoardPage.addListItem("done", "item3");
-        singleBoardPage.getListItems("to do","item1");
-
         //singleBoardPage.addListItem("done");
-
     }
 
 

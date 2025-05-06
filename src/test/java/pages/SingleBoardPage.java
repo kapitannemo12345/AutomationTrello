@@ -7,9 +7,10 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import base.CommonTest;
-
 import java.time.Duration;
 import java.util.List;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class SingleBoardPage {
 
@@ -46,6 +47,7 @@ public class SingleBoardPage {
         newListInputNameField.sendKeys(listName);
         wait.until(ExpectedConditions.attributeToBe(newListInputNameField, "value", listName));
         wait.until(ExpectedConditions.elementToBeClickable(addListButtonConfirm));
+        Allure.step("click confirm button");
         addListButtonConfirm.click();
         WebElement list = getListElementByName(listName);
     }
@@ -71,28 +73,47 @@ public class SingleBoardPage {
         return listHeader.findElement(By.xpath(".//ancestor::li[@data-testid='list-wrapper']"));
     }
 
-    public List<WebElement> getListItems(String listName, String itemName) {
+    public List<WebElement> getAllListItems(String listName) {
         WebElement listHeader = getListElementByName(listName);
         WebElement listContainer = getListContainer(listHeader);
-
-        String itemXPath = String.format(".//ol//li//a[contains(text(), '%s')]", itemName);
-
+        String itemXPath = ".//ol//li//a"; // Match all cards inside the list
         return wait.until(ExpectedConditions.visibilityOfAllElements(
                 listContainer.findElements(By.xpath(itemXPath))
         ));
     }
 
+    public List<WebElement> getListItemsByName(String listName, String itemName) {
+        WebElement listHeader = getListElementByName(listName);
+        WebElement listContainer = getListContainer(listHeader);
+        String itemXPath = String.format(".//ol//li//a[contains(text(), '%s')]", itemName);
+        return wait.until(ExpectedConditions.visibilityOfAllElements(
+                listContainer.findElements(By.xpath(itemXPath))
+        ));
+    }
+
+    public void assertItemExistsInList(String listName, String itemName) {
+        List<WebElement> items = getAllListItems(listName);
+        Allure.step("Checking if item '" + itemName + "' exists in list '" + listName + "'");
+        boolean found = items.stream()
+                .anyMatch(item -> item.getText().trim().equals(itemName));
+        assertTrue(found, "Item '" + itemName + "' was not found in list '" + listName + "'");
+    }
+
     public void addListItem(String listName, String itemName) {
+        Allure.step("Click add list button");
         WebElement listHeader = getListElementByName(listName);
         WebElement add = getAddCardButtonForList(listHeader);
         add = wait.until(ExpectedConditions.elementToBeClickable(add));
         add.click();
+        Allure.step("Fill text with list name");
         CommonTest.Wait(500);
         WebElement textField = getCardTextField();
         textField.sendKeys(itemName);
         CommonTest.Wait(500);
         wait.until(ExpectedConditions.attributeToBe(textField, "value", itemName));
+        Allure.step("Click add card button");
         addCardButton.click();
+        assertItemExistsInList(listName, itemName);
     }
 
 }
