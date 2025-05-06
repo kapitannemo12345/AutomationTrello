@@ -1,15 +1,16 @@
 package pages;
 
 import io.qameta.allure.Allure;
+import locators.SingleBoardLocators;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import base.CommonTest;
+
 import java.time.Duration;
 import java.util.List;
-import static org.testng.Assert.assertFalse;
+
 import static org.testng.Assert.assertTrue;
 
 public class SingleBoardPage {
@@ -17,77 +18,42 @@ public class SingleBoardPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    @FindBy(xpath = "//*[@data-testid='list-composer-button' and contains(text(), 'Dodaj kolejną listę')]" )
-    private List<WebElement> addListButton;
-
-    @FindBy(xpath = "//div[contains(@class, 'MwwP5nu2toWaoN')]//textarea[@data-testid='list-name-textarea']") // class MwwP5nu2toWaoN is always new item
-    private WebElement newListInputNameField;
-
-    @FindBy(xpath = "//button[@data-testid='list-composer-add-list-button']")
-    private WebElement addListButtonConfirm;
-
-    @FindBy(xpath = "//*[contains(@class, \"bxgKMAm3lq5BpA\") and contains(@class, \"SdamsUKjxSBwGb\") and contains(@class, \"SEj5vUdI3VvxDc\") and contains(text(), \"Dodaj Kartę\")]")
-    private WebElement addCardButton;
-
-    public SingleBoardPage(WebDriver driver){
+    public SingleBoardPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // 👈 Initialize wait
-        PageFactory.initElements(driver, this);
-    }
-
-    public WebElement findList(String listName){
-        return driver.findElement(By.xpath("//h2[@data-testid='list-name' and contains(., '" + listName + "')]"));
-    }
-
-    public void addList(String listName){
-        if (!addListButton.isEmpty()){
-            addListButton.getFirst().click();
-        }
-        Allure.step("Enter list name: " + listName);
-        newListInputNameField.sendKeys(listName);
-        wait.until(ExpectedConditions.attributeToBe(newListInputNameField, "value", listName));
-        wait.until(ExpectedConditions.elementToBeClickable(addListButtonConfirm));
-        Allure.step("click confirm button");
-        addListButtonConfirm.click();
-        WebElement list = getListElementByName(listName);
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     public WebElement getListElementByName(String listName) {
-        String xpath = String.format("//h2[@data-testid='list-name' and contains(text(), '%s')]", listName);
-        return driver.findElement(By.xpath(xpath));
+        return driver.findElement(SingleBoardLocators.listHeaderByName(listName));
+    }
+
+    public WebElement getListContainer(WebElement listHeader) {
+        return listHeader.findElement(SingleBoardLocators.LIST_CONTAINER);
     }
 
     public WebElement getAddCardButtonForList(WebElement listHeader) {
         return wait.until(ExpectedConditions.elementToBeClickable(
-                listHeader.findElement(By.xpath(".//ancestor::li[@data-testid='list-wrapper']//button[@data-testid='list-add-card-button']"))
+                listHeader.findElement(SingleBoardLocators.ADD_CARD_BUTTON_RELATIVE)
         ));
     }
 
     public WebElement getCardTextField() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath(".//ancestor::li[@data-testid='list-wrapper']//form//textarea[@data-testid='list-card-composer-textarea']")
-        ));
-    }
-
-    public WebElement getListContainer(WebElement listHeader){
-        return listHeader.findElement(By.xpath(".//ancestor::li[@data-testid='list-wrapper']"));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(SingleBoardLocators.CARD_TEXT_FIELD));
     }
 
     public List<WebElement> getAllListItems(String listName) {
         WebElement listHeader = getListElementByName(listName);
         WebElement listContainer = getListContainer(listHeader);
-        String itemXPath = ".//ol//li//a"; // Match all cards inside the list
         return wait.until(ExpectedConditions.visibilityOfAllElements(
-                listContainer.findElements(By.xpath(itemXPath))
+                listContainer.findElements(SingleBoardLocators.ALL_CARDS_IN_LIST)
         ));
     }
 
     public List<WebElement> getListItemsByName(String listName, String itemName) {
         WebElement listHeader = getListElementByName(listName);
         WebElement listContainer = getListContainer(listHeader);
-        String itemXPath = String.format(".//ol//li//a[contains(text(), '%s')]", itemName);
         return wait.until(ExpectedConditions.visibilityOfAllElements(
-                listContainer.findElements(By.xpath(itemXPath))
+                listContainer.findElements(SingleBoardLocators.cardByNameInList(itemName))
         ));
     }
 
@@ -99,21 +65,63 @@ public class SingleBoardPage {
         assertTrue(found, "Item '" + itemName + "' was not found in list '" + listName + "'");
     }
 
+    public void addList(String listName) {
+        List<WebElement> addListButtons = driver.findElements(SingleBoardLocators.ADD_LIST_BUTTON);
+        if (!addListButtons.isEmpty()) {
+            addListButtons.getFirst().click();
+        }
+
+        Allure.step("Enter list name: " + listName);
+        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(SingleBoardLocators.NEW_LIST_INPUT));
+        nameInput.sendKeys(listName);
+        wait.until(ExpectedConditions.attributeToBe(nameInput, "value", listName));
+
+        WebElement confirmButton = wait.until(ExpectedConditions.elementToBeClickable(SingleBoardLocators.CONFIRM_ADD_LIST_BUTTON));
+        Allure.step("Click confirm button");
+        confirmButton.click();
+
+        Allure.step("Verify list was added");
+        getListElementByName(listName);
+    }
+
     public void addListItem(String listName, String itemName) {
-        Allure.step("Click add list button");
+        Allure.step("Click add card button in list");
         WebElement listHeader = getListElementByName(listName);
         WebElement add = getAddCardButtonForList(listHeader);
-        add = wait.until(ExpectedConditions.elementToBeClickable(add));
-        add.click();
-        Allure.step("Fill text with list name");
+        wait.until(ExpectedConditions.elementToBeClickable(add)).click();
+
         CommonTest.Wait(500);
         WebElement textField = getCardTextField();
         textField.sendKeys(itemName);
         CommonTest.Wait(500);
         wait.until(ExpectedConditions.attributeToBe(textField, "value", itemName));
-        Allure.step("Click add card button");
+
+        WebElement addCardButton = wait.until(ExpectedConditions.elementToBeClickable(SingleBoardLocators.ADD_CARD_BUTTON_GLOBAL));
+        Allure.step("Click confirm card add button");
         addCardButton.click();
+
         assertItemExistsInList(listName, itemName);
     }
 
+    public void dragAndDropCardItem(String sourceListName, String itemName, String targetListName) {
+        WebElement sourceListHeader = getListElementByName(sourceListName);
+        WebElement targetListHeader = getListElementByName(targetListName);
+
+        WebElement sourceListContainer = getListContainer(sourceListHeader);
+        WebElement targetListContainer = getListContainer(targetListHeader);
+
+        WebElement cardToDrag = sourceListContainer.findElement(SingleBoardLocators.cardByNameInList(itemName));
+        WebElement dropTarget = targetListContainer.findElement(SingleBoardLocators.LIST_CARD_DROP_TARGET);
+
+        Allure.step("Dragging card '" + itemName + "' from '" + sourceListName + "' to '" + targetListName + "'");
+        new Actions(driver)
+                .clickAndHold(cardToDrag)
+                .moveToElement(dropTarget)
+                .pause(Duration.ofMillis(500))
+                .release()
+                .build()
+                .perform();
+
+        assertItemExistsInList(targetListName, itemName);
+    }
 }
