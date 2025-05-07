@@ -119,8 +119,8 @@ public class SingleBoardPage {
                 .moveToElement(dropTarget)
                 .pause(Duration.ofMillis(500))
                 .release()
-                .build()
-                .perform();
+                .build() //generates a composite action containing all actions so far
+                .perform(); // executes action
 
         assertItemExistsInList(targetListName, itemName);
     }
