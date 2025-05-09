@@ -49,4 +49,20 @@ public class SingleBoardLocators {
     public static By cardByNameInList(String name) {
         return By.xpath(String.format(".//ol//li//a[contains(text(), '%s')]", name));
     }
+
+    //3 dots button on top bar
+    public static final By THREE_DOTS_BUTTON =
+            By.xpath("//div[contains(@class,'board-header u-clearfix js-board-header')]//span[contains(@data-testid, 'OverflowMenuHorizontalIcon')]");
+
+    //3 dots menu close table
+    public static final By CLOSE_TABLE_BUTTON =
+            By.xpath("//div[contains(@data-testid, 'board-menu-current-panel')]//div[contains(text(), 'Zamknij tablicę')]");
+
+    //3 dots menu close conifrm
+    public static final By CONFIRM_CLOSE_TABLE_BUTTON =
+            By.xpath("//button[contains(@data-testid, 'popover-close-board-confirm')]");
+
+    public static final By PERMANENTLY_DELETE_TABLE_BUTTON =
+            By.xpath("//button[contains(@data-testid, 'close-board-delete-board-button')]");
+
 }

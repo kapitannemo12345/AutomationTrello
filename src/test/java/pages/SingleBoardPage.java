@@ -124,4 +124,15 @@ public class SingleBoardPage {
 
         assertItemExistsInList(targetListName, itemName);
     }
+
+    public void deleteBoard(String boardName){
+        TopBarPage topBarPage = new TopBarPage(this.driver);
+        topBarPage.search(boardName);
+        driver.findElement(SingleBoardLocators.THREE_DOTS_BUTTON).click();
+        driver.findElement(SingleBoardLocators.CLOSE_TABLE_BUTTON).click();
+        driver.findElement(SingleBoardLocators.CONFIRM_CLOSE_TABLE_BUTTON).click();
+        driver.findElement(SingleBoardLocators.PERMANENTLY_DELETE_TABLE_BUTTON).click();
+    }
+
+
 }

@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 import pages.LoginPage;
 import pages.BoardsPage;
 import pages.SingleBoardPage;
-import pages.TopBarPage;
 
 
 public class TableTests extends BaseTest {
@@ -65,13 +64,16 @@ public class TableTests extends BaseTest {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.loginWithValidCredentials();
 
-        //BoardsPage boardsPage = new BoardsPage(driver);
-        //boardsPage.createBoard();
+        BoardsPage boardsPage = new BoardsPage(driver);
+        boardsPage.createBoard();
 
+        SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
+        singleBoardPage.deleteBoard("testTable");
 
-        TopBarPage topBarPage = new TopBarPage(driver);
-        CommonTest.Wait(500);
-        topBarPage.search("testTable");
+       // TopBarPage topBarPage = new TopBarPage(driver);
+        //CommonTest.Wait(500);
+
+        //topBarPage.search("testTable");
 
 //        SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
 //        singleBoardPage.addList( "to do");

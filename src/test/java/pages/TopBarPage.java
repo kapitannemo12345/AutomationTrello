@@ -21,6 +21,7 @@ public class TopBarPage extends TopBarLocators {
     }
 
     public void search(String text) {
+        CommonTest.Wait(5000);// 3 seconds
         Allure.step("Input text into search field");
         WebElement searchBox = driver.findElement(TopBarLocators.SEARCH_FIELD);
         searchBox.sendKeys("test");
@@ -31,3 +32,4 @@ public class TopBarPage extends TopBarLocators {
     }
 
 }
+

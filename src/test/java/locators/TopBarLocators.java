@@ -14,12 +14,9 @@ public class TopBarLocators {
         return By.xpath(String.format("//section//a[contains(@href, '/b/')]/div//span[contains(text(), '%s')]",itemName));
     }
 
-
-
 //    // Dynamic: find a card inside a list by its name
 //    public static By cardByNameInList(String name) {
 //        return By.xpath(String.format(".//ol//li//a[contains(text(), '%s')]", name));
 //    }
-
 
 }
