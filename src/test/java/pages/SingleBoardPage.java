@@ -87,8 +87,14 @@ public class SingleBoardPage {
     public void addListItem(String listName, String itemName) {
         Allure.step("Click add card button in list");
         WebElement listHeader = getListElementByName(listName);
-        WebElement add = getAddCardButtonForList(listHeader);
-        wait.until(ExpectedConditions.elementToBeClickable(add)).click();
+
+        CommonTest.Wait(500);
+        List<WebElement> elements = listHeader.findElements(SingleBoardLocators.ADD_CARD_BUTTON_RELATIVE);
+        if (!elements.isEmpty()) {
+            WebElement first = elements.getFirst();
+            wait.until(ExpectedConditions.elementToBeClickable(first));
+            first.click();
+        }
 
         CommonTest.Wait(500);
         WebElement textField = getCardTextField();

@@ -32,7 +32,7 @@ public class SingleBoardLocators {
     public static final By LIST_CARD_DROP_TARGET =
             By.xpath(".//ol");
 
-    // Add-card button within a specific list
+    // Add-card button within a specific list at the bottom of it
     public static final By ADD_CARD_BUTTON_RELATIVE =
             By.xpath(".//ancestor::li[@data-testid='list-wrapper']//button[@data-testid='list-add-card-button']");
 
