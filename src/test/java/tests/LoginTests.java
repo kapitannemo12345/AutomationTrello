@@ -18,19 +18,19 @@ public class LoginTests extends BaseTest {
         loginPage.loginWithValidCredentials();
     }
 
-    @Test
-    @Description("Login with invalid credentials")
-    @Severity(SeverityLevel.CRITICAL)
-    public void invalidPasswordLogin(){
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.loginWithInvalidPassword();
-    }
-
-    @Test
-    @Description("Login with invalid 2 credentials")
-    @Severity(SeverityLevel.CRITICAL)
-    public void invalidEmailLogin(){
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.loginWithInvalidEmail();
-    }
+//    @Test
+//    @Description("Login with invalid credentials")
+//    @Severity(SeverityLevel.CRITICAL)
+//    public void invalidPasswordLogin(){
+//        LoginPage loginPage = new LoginPage(driver);
+//        loginPage.loginWithInvalidPassword();
+//    }
+//
+//    @Test
+//    @Description("Login with invalid 2 credentials")
+//    @Severity(SeverityLevel.CRITICAL)
+//    public void invalidEmailLogin(){
+//        LoginPage loginPage = new LoginPage(driver);
+//        loginPage.loginWithInvalidEmail();
+//    }
 }

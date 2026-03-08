@@ -13,7 +13,7 @@ public class LoginPage {
     @FindBy(xpath = "//a[contains(@href, 'id.atlassian.com/login') and contains(text(), 'Log in')]" )
     private WebElement searchLoginButton;
 
-    @FindBy(id = "username")
+    @FindBy(id = "username-uid1")
     private WebElement emailInputField;
 
     @FindBy(id = "login-submit")
@@ -22,7 +22,7 @@ public class LoginPage {
     @FindBy(id = "password")
     private WebElement passwordInputField;
 
-    @FindBy(className = "AuI9fDVRnIPU3l")
+    @FindBy(id="header-member-menu-avatar")
     private WebElement logo;
 
     @FindBy(id = "WhiteboxContainer")
@@ -47,6 +47,7 @@ public class LoginPage {
         passwordInputField.sendKeys(password);
         loginSubmitButton.click();
         Assert.assertTrue( "login failed", logo.isDisplayed());
+
     }
 
     public void loginWithInvalidPassword(){
