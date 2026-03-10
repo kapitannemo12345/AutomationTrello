@@ -39,4 +39,9 @@ public class BoardsPage extends BoardsPageLocators {
         wait.until(ExpectedConditions.visibilityOf(tableName));
         Assert.assertTrue("Table name is not shown", tableName.isDisplayed());
     }
+
+    public boolean isUserLoggedIn(){
+        wait.until(ExpectedConditions.visibilityOf(profileAvatar));
+        return profileAvatar.isDisplayed();
+    }
 }

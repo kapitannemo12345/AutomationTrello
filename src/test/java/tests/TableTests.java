@@ -25,7 +25,7 @@ public class TableTests extends BaseTest {
     }
 
     @Test
-    @Description("Create table")
+    @Description("add task to the ")
     @Severity(SeverityLevel.CRITICAL)
     public void AddBoardsAndTasksMoveThem(){
         LoginPage loginPage = new LoginPage(driver);
@@ -59,13 +59,13 @@ public class TableTests extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void modifyTable(){
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.loginWithValidCredentials();
-
-        BoardsPage boardsPage = new BoardsPage(driver);
+        //loginPage.loginWithValidCredentials();
+        //BoardsPage boardsPage = new BoardsPage(driver);
+        BoardsPage boardsPage = loginPage.loginWithValidCredentials();
         boardsPage.createBoard();
 
         SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
-//
+
         singleBoardPage.addList( "to do");
         CommonTest.Wait(500);
         singleBoardPage.addListItem("to do","item1");

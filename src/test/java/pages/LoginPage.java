@@ -1,74 +1,74 @@
 package pages;
 
 import io.qameta.allure.Allure;
+import locators.LoginPageLocators;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;;
 
 
-public class LoginPage {
+public class LoginPage extends LoginPageLocators {
 
-    @FindBy(xpath = "//a[contains(@href, 'id.atlassian.com/login') and contains(text(), 'Log in')]" )
-    private WebElement searchLoginButton;
-
-    @FindBy(id = "username-uid1")
-    private WebElement emailInputField;
-
-    @FindBy(id = "login-submit")
-    private WebElement loginSubmitButton;
-
-    @FindBy(id = "password")
-    private WebElement passwordInputField;
-
-    @FindBy(id="header-member-menu-avatar")
-    private WebElement logo;
-
-    @FindBy(id = "WhiteboxContainer")
-    private WebElement failedLoginMessage;
-
-    @FindBy(id = "signup-submit")
-    private WebElement signupButton;
+    private final WebDriver driver;
+    private final WebDriverWait wait;
 
     public LoginPage(WebDriver driver){
-        PageFactory.initElements(driver, this);
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
-    public void loginWithValidCredentials(){
+    private void click(By locator){
+        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+    }
+
+    private void type(By locator, String text){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).sendKeys(text);
+    }
+
+    private boolean isVisible(By locator){
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).isDisplayed();
+    }
+
+    public BoardsPage loginWithValidCredentials(){
+
         String email = System.getenv("T_EMAIL");
         String password = System.getenv("T_PASSWORD");
         Allure.step("click login button");
-        searchLoginButton.click();
+        click(searchLoginButton);
         Allure.step("click enter email");
-        emailInputField.sendKeys(email);
-        loginSubmitButton.click();
+        type(emailInputField, email);
+        click(loginSubmitButton);
         Allure.step("enter password");
-        passwordInputField.sendKeys(password);
-        loginSubmitButton.click();
-        Assert.assertTrue( "login failed", logo.isDisplayed());
+        type(passwordInputField, password);
+        click(loginSubmitButton);
+        Assert.assertTrue("login failed", isVisible(logo));
 
+        return new BoardsPage(driver);
     }
 
     public void loginWithInvalidPassword(){
+
         String email = System.getenv("T_EMAIL");
         String password = "123";
-        searchLoginButton.click();
+        click(searchLoginButton);
         Allure.step("click enter email");
-        emailInputField.sendKeys(email);
-        loginSubmitButton.click();
+        type(emailInputField, email);
+        click(loginSubmitButton);
         Allure.step("enter fake password");
-        passwordInputField.sendKeys(password);
-        loginSubmitButton.click();
-        Assert.assertTrue( "failed login message does not show", failedLoginMessage.isDisplayed());
+        type(passwordInputField, password);
+        click(loginSubmitButton);
+        Assert.assertTrue("failed login message does not show", isVisible(failedLoginMessage));
     }
 
     public void loginWithInvalidEmail(){
         String email = "fake123213145@gmail.com";
-        searchLoginButton.click();
+        click(searchLoginButton);
         Allure.step("enter fake email");
-        emailInputField.sendKeys(email);
-        loginSubmitButton.click();
-        Assert.assertTrue( "failed login message does not show", signupButton.isDisplayed());
+        type(emailInputField, email);
+        click(loginSubmitButton);
+        Assert.assertTrue("failed login message does not show", isVisible(signupButton));
     }
 }

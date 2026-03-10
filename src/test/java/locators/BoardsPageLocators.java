@@ -19,4 +19,7 @@ public class BoardsPageLocators {
     @FindBy(xpath = "//h1[normalize-space(text())='testTable']")
     protected WebElement tableName;
 
+    @FindBy(id="header-member-menu-avatar")
+    protected WebElement profileAvatar;
+
 }
