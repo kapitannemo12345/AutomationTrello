@@ -1,5 +1,6 @@
 package pages;
 
+import base.BasePage;
 import io.qameta.allure.Allure;
 import locators.LoginPageLocators;
 import org.junit.Assert;
@@ -10,26 +11,21 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;;
 
 
-public class LoginPage extends LoginPageLocators {
+public class LoginPage extends BasePage {
 
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+    private final By searchLoginButton = By.xpath("//a[contains(@href, 'id.atlassian.com/login') and contains(text(), 'Log in')]");
+    private final By emailInputField = By.id("username-uid1");
+    private final By loginSubmitButton = By.id("login-submit");
+    private final By passwordInputField = By.id("password");
+    private final By logo = By.id("header-member-menu-avatar");
+    private final By failedLoginMessage = By.id("WhiteboxContainer");
+    private final By signupButton = By.id("signup-submit");
+
+    //private final WebDriver driver;
+    //private final WebDriverWait wait;
 
     public LoginPage(WebDriver driver){
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-    }
-
-    private void click(By locator){
-        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
-    }
-
-    private void type(By locator, String text){
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).sendKeys(text);
-    }
-
-    private boolean isVisible(By locator){
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).isDisplayed();
+        super(driver); // calls BasePage constructor
     }
 
     public BoardsPage loginWithValidCredentials(){

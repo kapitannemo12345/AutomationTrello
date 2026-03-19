@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class BoardsPage extends BoardsPageLocators {
+public class BoardsPage extends BoardsPageLocators  {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
