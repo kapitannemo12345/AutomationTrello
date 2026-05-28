@@ -16,7 +16,8 @@ import java.time.Duration;
 
 public class BoardsPage extends BasePage {
 
-    private final By createButton = By.xpath("//*[@id='header']//button//p[normalize-space(text())='Utwórz']");
+    //private final By createButton = By.xpath("//*[@id='header']//button//p[normalize-space(text())='Utwórz']");
+    private final By createButton = By.xpath("//button[@data-testid='header-create-menu-button']");
     private final By selectBoardType = By.xpath("//*[contains(text(), 'Utwórz tablicę')]");
     private final By tableNameInputField = By.xpath("//section//form//div[1]//input");
     private final By createBoard = By.xpath("//form//button[normalize-space(text())='Utwórz']");

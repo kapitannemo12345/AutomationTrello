@@ -1,35 +1,73 @@
 package pages;
 
-import base.CommonTest;
+import base.BasePage;
 import io.qameta.allure.Allure;
-import locators.TopBarLocators;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
+import java.util.List;
 
-public class TopBarPage extends TopBarLocators {
+public class TopBarPage extends BasePage {
 
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+    private final By allInputs = By.tagName("input");
+
+    public static By searchFieldItem(String itemName){
+        return By.xpath(String.format(
+                "//a[contains(@href,'/b/') and contains(.,'%s')]",
+                itemName
+        ));
+    }
 
     public TopBarPage(WebDriver driver){
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        super(driver);
     }
 
     public void search(String text) {
-        CommonTest.Wait(5000);// 3 seconds
-        Allure.step("Input text into search field");
-        WebElement searchBox = driver.findElement(TopBarLocators.SEARCH_FIELD);
-        searchBox.sendKeys("test");
-        CommonTest.Wait(5000);
-        WebElement resultItem = wait.until(ExpectedConditions.visibilityOfElementLocated(TopBarLocators.searchFieldItem(text)));
+
+        Allure.step("Find visible input safely (handle React re-render)");
+
+        WebElement input = wait.until(driver -> {
+            List<WebElement> inputs = driver.findElements(allInputs);
+
+            for (WebElement el : inputs) {
+                try {
+                    if (el.isDisplayed()) {
+                        return el; // return fresh element
+                    }
+                } catch (StaleElementReferenceException ignored) {
+                }
+            }
+            return null;
+        });
+
+        Allure.step("Click + type with retry (anti-stale)");
+
+        // 🔁 retry mechanism (VERY important)
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                input = driver.findElements(allInputs)
+                        .stream()
+                        .filter(WebElement::isDisplayed)
+                        .findFirst()
+                        .orElseThrow();
+
+                input.click();
+                input.clear();
+                input.sendKeys(text);
+                break;
+
+            } catch (StaleElementReferenceException e) {
+                attempts++;
+            }
+        }
+
+        Allure.step("Click search result");
+
+        WebElement resultItem = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(searchFieldItem(text))
+        );
+
         resultItem.click();
-        CommonTest.Wait(5000);
     }
-
 }
-

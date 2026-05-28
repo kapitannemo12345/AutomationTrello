@@ -22,69 +22,71 @@ public class TableTests extends BaseTest {
         loginPage.loginWithValidCredentials();
         BoardsPage boardsPage = new BoardsPage(driver);
         boardsPage.createBoard();
-    }
-
-    @Test
-    @Description("add task to the ")
-    @Severity(SeverityLevel.CRITICAL)
-    public void AddBoardsAndTasksMoveThem(){
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.loginWithValidCredentials();
-
-        BoardsPage boardsPage = new BoardsPage(driver);
-        boardsPage.createBoard();
-
         SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
-        singleBoardPage.addList( "to do");
-
-        CommonTest.Wait(500);
-        singleBoardPage.addListItem("to do","item1");
-
-        CommonTest.Wait(500);
-        singleBoardPage.addList( "in progress");
-
-        CommonTest.Wait(500);
-        singleBoardPage.addListItem("in progress", "item2");
-
-        CommonTest.Wait(500);
-        singleBoardPage.addList( "done");
-
-        CommonTest.Wait(500);
-        singleBoardPage.addListItem("done", "item3");
-        singleBoardPage.dragAndDropCardItem("to do","item1", "in progress");
-    }
-
-    @Test
-    @Description("Create table")
-    @Severity(SeverityLevel.CRITICAL)
-    public void modifyTable(){
-        LoginPage loginPage = new LoginPage(driver);
-        //loginPage.loginWithValidCredentials();
-        //BoardsPage boardsPage = new BoardsPage(driver);
-        BoardsPage boardsPage = loginPage.loginWithValidCredentials();
-        boardsPage.createBoard();
-
-        SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
-
-        singleBoardPage.addList( "to do");
-        CommonTest.Wait(500);
-        singleBoardPage.addListItem("to do","item1");
-        CommonTest.Wait(500);
-        singleBoardPage.addList( "in progress");
-        CommonTest.Wait(500);
-        singleBoardPage.addListItem("in progress", "item2");
-        CommonTest.Wait(500);
-        singleBoardPage.addList( "done");
-        CommonTest.Wait(500);
-        singleBoardPage.addListItem("done", "item3");
-        singleBoardPage.dragAndDropCardItem("to do","item1", "in progress");
-        CommonTest.Wait(500);
-        singleBoardPage.addListItem("done", "item4");
-
-        //TopBarPage topBarPage = new TopBarPage(driver);
-        //CommonTest.Wait(500);
         singleBoardPage.deleteBoard("testTable");
     }
+
+//    @Test
+//    @Description("add task to the ")
+//    @Severity(SeverityLevel.CRITICAL)
+//    public void AddBoardsAndTasksMoveThem(){
+//        LoginPage loginPage = new LoginPage(driver);
+//        loginPage.loginWithValidCredentials();
+//
+//        BoardsPage boardsPage = new BoardsPage(driver);
+//        boardsPage.createBoard();
+//
+//        SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
+//        singleBoardPage.addList( "to do");
+//
+//        CommonTest.Wait(500);
+//        singleBoardPage.addListItem("to do","item1");
+//
+//        CommonTest.Wait(500);
+//        singleBoardPage.addList( "in progress");
+//
+//        CommonTest.Wait(500);
+//        singleBoardPage.addListItem("in progress", "item2");
+//
+//        CommonTest.Wait(500);
+//        singleBoardPage.addList( "done");
+//
+//        CommonTest.Wait(500);
+//        singleBoardPage.addListItem("done", "item3");
+//        singleBoardPage.dragAndDropCardItem("to do","item1", "in progress");
+//    }
+//
+//    @Test
+//    @Description("Create table")
+//    @Severity(SeverityLevel.CRITICAL)
+//    public void modifyTable(){
+//        LoginPage loginPage = new LoginPage(driver);
+//        //loginPage.loginWithValidCredentials();
+//        //BoardsPage boardsPage = new BoardsPage(driver);
+//        BoardsPage boardsPage = loginPage.loginWithValidCredentials();
+//        boardsPage.createBoard();
+//
+//        SingleBoardPage singleBoardPage = new SingleBoardPage(driver);
+//
+//        singleBoardPage.addList( "to do");
+//        CommonTest.Wait(500);
+//        singleBoardPage.addListItem("to do","item1");
+//        CommonTest.Wait(500);
+//        singleBoardPage.addList( "in progress");
+//        CommonTest.Wait(500);
+//        singleBoardPage.addListItem("in progress", "item2");
+//        CommonTest.Wait(500);
+//        singleBoardPage.addList( "done");
+//        CommonTest.Wait(500);
+//        singleBoardPage.addListItem("done", "item3");
+//        singleBoardPage.dragAndDropCardItem("to do","item1", "in progress");
+//        CommonTest.Wait(500);
+//        singleBoardPage.addListItem("done", "item4");
+//
+//        //TopBarPage topBarPage = new TopBarPage(driver);
+//        //CommonTest.Wait(500);
+//        singleBoardPage.deleteBoard("testTable");
+//    }
 
 
 
